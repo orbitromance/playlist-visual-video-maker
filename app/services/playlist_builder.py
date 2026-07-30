@@ -37,8 +37,8 @@ class PlaylistBuilder:
         except RuntimeError:
             fallback = [
                 "-f", "concat", "-safe", "0", "-i", str(concat_file),
-                "-c:v", "libx264", "-preset", "medium", "-pix_fmt", "yuv420p",
-                "-c:a", "aac", "-b:a", "256k", "-movflags", "+faststart", str(output),
+                "-c:v", "libx264", "-preset", "veryfast", "-pix_fmt", "yuv420p",
+                "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(output),
             ]
             self.service.run_with_progress(fallback, total_duration, callback, log_path)
         return output

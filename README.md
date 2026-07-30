@@ -1,12 +1,12 @@
-# Playlist Visual Video Maker
+# PLAYWAVE
 
-여러 곡의 오디오와 이미지를 등록해 개별 visualizer MP4와 하나의 긴 플레이리스트 MP4를 만드는 Windows 우선 데스크톱 앱입니다.
+여러 곡의 오디오와 이미지를 등록해 개별 visualizer MP4와 하나의 긴 플레이리스트 MP4를 만드는 Windows·macOS 데스크톱 앱입니다.
 
 ## Windows 무설치판 실행법
 
-1. GitHub Actions에서 생성된 `PlaylistVisualMaker-Windows.zip`을 내려받습니다.
+1. GitHub Actions에서 생성된 `PlayWave-Windows.zip`을 내려받습니다.
 2. ZIP을 원하는 폴더에 **전체 압축 해제**합니다.
-3. `PlaylistVisualMaker.exe`를 더블클릭합니다.
+3. `PlayWave.exe`를 더블클릭합니다.
 
 Python, PySide6, FFmpeg를 따로 설치할 필요가 없습니다. EXE 하나만 다른 곳으로
 옮기지 말고 압축 해제된 폴더를 통째로 유지하세요.
@@ -40,5 +40,9 @@ pytest -q
 ## Windows 배포판 빌드
 
 저장소의 Actions 탭에서 `Build Windows EXE`를 실행하면 Windows 환경에서
-PyInstaller onedir 배포판을 만들고 `PlaylistVisualMaker-Windows` artifact로
+PyInstaller onedir 배포판을 만들고 `PlayWave-Windows` artifact로
 업로드합니다. 배포판에는 FFmpeg와 ffprobe가 포함됩니다.
+
+macOS 빌드는 Apple Silicon용과 Intel용을 각각 생성합니다. 압축을 풀고
+`PlayWave.app`을 실행하며, 테스트 빌드는 Apple 공증을 받지 않았으므로 최초
+실행 시 Finder에서 앱을 우클릭한 뒤 `열기`를 선택해야 할 수 있습니다.

@@ -24,12 +24,12 @@ class MainWindow(QMainWindow):
         self.tracks: list[Track] = []
         self.metadata = MetadataService()
         self.thread: QThread | None = None
-        self.setWindowTitle("Playlist Visual Video Maker")
+        self.setWindowTitle("PLAYWAVE")
         self.resize(1120, 760)
         root = QWidget()
         self.setCentralWidget(root)
         layout = QVBoxLayout(root)
-        heading = QLabel("Playlist Visual Video Maker")
+        heading = QLabel("PLAYWAVE")
         heading.setStyleSheet("font-size: 28px; font-weight: 700; color: #7046e8; margin: 12px 0;")
         layout.addWidget(heading)
         controls = QHBoxLayout()

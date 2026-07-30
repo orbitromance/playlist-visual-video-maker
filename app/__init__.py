@@ -1,1 +1,1 @@
-"""Playlist Visual Video Maker."""
+"""PLAYWAVE desktop video visualizer."""

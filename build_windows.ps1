@@ -30,19 +30,19 @@ python -m PyInstaller `
   --clean `
   --onedir `
   --windowed `
-  --name "PlaylistVisualMaker" `
+  --name "PlayWave" `
   --add-binary "$VendorDir\ffmpeg.exe;." `
   --add-binary "$VendorDir\ffprobe.exe;." `
   main.py
 
 $Readme = @"
-Playlist Visual Video Maker - Windows Test Build
+PLAYWAVE - Windows Test Build
 
 1. Keep this entire folder together.
-2. Double-click PlaylistVisualMaker.exe.
+2. Double-click PlayWave.exe.
 3. No Python or FFmpeg installation is required.
 
 Windows may show a SmartScreen warning because this test build is not
 code-signed. Check the publisher and file source before choosing to run it.
 "@
-Set-Content -Path "dist\PlaylistVisualMaker\README_FIRST.txt" -Value $Readme -Encoding UTF8
+Set-Content -Path "dist\PlayWave\README_FIRST.txt" -Value $Readme -Encoding UTF8

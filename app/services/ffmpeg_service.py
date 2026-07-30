@@ -5,17 +5,26 @@ import os
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Callable, Iterable
 
 ProgressCallback = Callable[[float, float], None]
 
 
+def _hidden_process_flags() -> int:
+    if os.name == "nt":
+        return subprocess.CREATE_NO_WINDOW
+    return 0
+
+
 class FFmpegService:
     def __init__(self, ffmpeg: str | None = None, ffprobe: str | None = None) -> None:
         bundled_root = Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
-        bundled_ffmpeg = bundled_root / "ffmpeg.exe"
-        bundled_ffprobe = bundled_root / "ffprobe.exe"
+        ffmpeg_name = "ffmpeg.exe" if os.name == "nt" else "ffmpeg"
+        ffprobe_name = "ffprobe.exe" if os.name == "nt" else "ffprobe"
+        bundled_ffmpeg = bundled_root / ffmpeg_name
+        bundled_ffprobe = bundled_root / ffprobe_name
         self.ffmpeg = (
             ffmpeg
             or os.environ.get("PVM_FFMPEG")
@@ -44,6 +53,7 @@ class FFmpegService:
             encoding="utf-8",
             errors="replace",
             check=False,
+            creationflags=_hidden_process_flags(),
         )
         if result.returncode:
             raise RuntimeError(result.stderr.strip() or f"파일을 읽을 수 없습니다: {path}")
@@ -58,23 +68,26 @@ class FFmpegService:
     ) -> None:
         self.ensure_available()
         command = [self.ffmpeg, "-hide_banner", "-y", *map(str, args), "-progress", "pipe:1", "-nostats"]
-        process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-        )
-        assert process.stdout is not None
-        for line in process.stdout:
-            key, _, value = line.strip().partition("=")
-            if key in {"out_time_us", "out_time_ms"}:
-                current = float(value) / 1_000_000
-                if callback:
-                    callback(min(current, duration), duration)
-        stderr = process.stderr.read() if process.stderr else ""
-        return_code = process.wait()
+        with tempfile.TemporaryFile(mode="w+", encoding="utf-8", errors="replace") as stderr_file:
+            process = subprocess.Popen(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=stderr_file,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                creationflags=_hidden_process_flags(),
+            )
+            assert process.stdout is not None
+            for line in process.stdout:
+                key, _, value = line.strip().partition("=")
+                if key in {"out_time_us", "out_time_ms"}:
+                    current = float(value) / 1_000_000
+                    if callback:
+                        callback(min(current, duration), duration)
+            return_code = process.wait()
+            stderr_file.seek(0)
+            stderr = stderr_file.read()
         if log_path:
             log_path.parent.mkdir(parents=True, exist_ok=True)
             log_path.write_text("COMMAND:\n" + subprocess.list2cmdline(command) + "\n\nSTDERR:\n" + stderr, encoding="utf-8")

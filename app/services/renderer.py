@@ -15,9 +15,9 @@ class RenderConfig:
     width: int = 1920
     height: int = 1080
     fps: int = 30
-    video_bitrate: str = "10M"
-    audio_bitrate: str = "256k"
-    preset: str = "medium"
+    video_bitrate: str = "6M"
+    audio_bitrate: str = "192k"
+    preset: str = "veryfast"
 
 
 class VideoRenderer:
