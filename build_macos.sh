@@ -27,6 +27,13 @@ python3 -m PyInstaller \
   --add-binary "${ffprobe_path}:." \
   main.py
 
+bundled_ffmpeg="$(find "dist/PlayWave.app" -type f -name ffmpeg -print -quit)"
+bundled_ffprobe="$(find "dist/PlayWave.app" -type f -name ffprobe -print -quit)"
+test -n "$bundled_ffmpeg"
+test -n "$bundled_ffprobe"
+chmod +x "$bundled_ffmpeg" "$bundled_ffprobe"
+codesign --force --sign - "$bundled_ffmpeg"
+codesign --force --sign - "$bundled_ffprobe"
 codesign --force --deep --sign - "dist/PlayWave.app"
 ditto -c -k --sequesterRsrc --keepParent \
   "dist/PlayWave.app" \
