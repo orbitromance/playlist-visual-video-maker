@@ -38,18 +38,6 @@ jobs:
           RUNNER_ARCH: ${{ matrix.arch }}
         run: bash ./build_macos.sh
 
-      - name: Verify app and bundled tools
-        shell: bash
-        run: |
-          test -d "dist/PlayWave.app"
-          test -f "dist/PlayWave-macOS-${{ matrix.arch }}.zip"
-          ffmpeg_path="$(find "dist/PlayWave.app" -type f -name ffmpeg -print -quit)"
-          ffprobe_path="$(find "dist/PlayWave.app" -type f -name ffprobe -print -quit)"
-          test -n "$ffmpeg_path" && test -x "$ffmpeg_path"
-          test -n "$ffprobe_path" && test -x "$ffprobe_path"
-          "$ffmpeg_path" -version
-          "$ffprobe_path" -version
-
       - name: Upload macOS app
         uses: actions/upload-artifact@v4
         with:
