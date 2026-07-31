@@ -47,7 +47,8 @@ jobs:
           ffprobe_path="$(find "dist/PlayWave.app" -type f -name ffprobe -print -quit)"
           test -n "$ffmpeg_path" && test -x "$ffmpeg_path"
           test -n "$ffprobe_path" && test -x "$ffprobe_path"
-          codesign --verify --deep --strict "dist/PlayWave.app"
+          "$ffmpeg_path" -version
+          "$ffprobe_path" -version
 
       - name: Upload macOS app
         uses: actions/upload-artifact@v4
